@@ -1,9 +1,12 @@
+import Quiz from '@/components/quiz'
 import React from 'react'
 
-const page = () => {
+const Home = () => {
   return (
-    <div>homepage</div>
+    <div>
+      <Quiz/>
+    </div>
   )
 }
 
-export default page
+export default Home
