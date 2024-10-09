@@ -1,10 +1,12 @@
 "use client";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader } from "./ui/card";
-import { Button } from "./ui/button";
+import Timer from "@/components/timer";
+
 import { Toaster, toast } from "react-hot-toast";
-import Timer from "./timer";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // TODO:
 // add resume kuis
@@ -20,7 +22,7 @@ interface TriviaQuestion {
   incorrect_answers: string[];
 }
 
-function Quiz() {
+const page = () => {
   const [triviaQuestions, setTriviaQuestions] = useState<TriviaQuestion[]>([]);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
   const [currentPoints, setCurrentPoints] = useState<number>(0);
@@ -165,15 +167,28 @@ function Quiz() {
               </>
             ) : (
               // Show the quiz result summary when the quiz is finished
-              <Card className="w-[500px] p-5">
+              <Card className="w-[500px] h-[350px] p-5 flex flex-col justify-evenly">
                 <h2 className="text-xl font-bold mb-4">Quiz Finished!</h2>
-                <div>
-                  Correct Answers: {correctAnswersCount}/{triviaQuestions.length}
+                <div className="flex justify-around items-center">
+                  <div className="flex flex-col text-center font-semibold text-xl">
+                    <h3 className="">Correct Answers</h3>
+                    <h3>
+                      {correctAnswersCount}/{triviaQuestions.length}
+                    </h3>
+                  </div>
+                  <div className="flex flex-col text-center font-semibold text-xl">
+                    <h3>Final Score</h3>
+                    <h3>{correctAnswersCount * 10}</h3>
+                  </div>
                 </div>
-                <div>Final Score: {correctAnswersCount * 10}</div>
-                <Button onClick={resetQuiz} className="mt-4 w-full">
-                  Start New Quiz
-                </Button>
+                <div>
+                  <Button onClick={resetQuiz} className="mt-4 w-full">
+                    Start New Quiz
+                  </Button>
+                  <Link href={"/"}>
+                    <Button className="mt-4 w-full">Back to menu</Button>
+                  </Link>
+                </div>
               </Card>
             )}
           </div>
@@ -182,6 +197,6 @@ function Quiz() {
       <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
-}
+};
 
-export default Quiz;
+export default page;
