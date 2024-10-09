@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { Toaster, toast } from "react-hot-toast";
+import Timer from "./timer";
 
 // TODO:
-// Create a loading screen after click the last answer,
-// show the result screen that contain the how many correct answer and points
+// add resume kuis
+// jangan lupa pindah branch fitur baru
 
 // Define the interface for a trivia question
 interface TriviaQuestion {
@@ -67,6 +68,7 @@ function Quiz() {
     setQuizFinished(false); // Set quizFinished to false
     setSelectedAnswer(null);
     setAnswerCorrectness(null);
+    setCorrectAnswersCount(0);
     getTriviaData(); // Fetch new questions
   };
 
@@ -101,6 +103,11 @@ function Quiz() {
     }, 1000);
   };
 
+  // Handler for when the timer hits 0
+  const handleTimeOut = (): void => {
+    setQuizFinished(true);
+  };
+
   // Converts HTML entities to readable characters
   const removeCharacters = (text: string): string => {
     return text
@@ -119,16 +126,20 @@ function Quiz() {
           <div>
             {!quizFinished ? (
               <>
-                <div className="flex justify-between mb-3">
-                  <div>Current Points: {currentPoints}</div>
-                  <div>
-                    Question {currentQuestionIndex + 1}/{triviaQuestions.length}
-                  </div>
-                </div>
                 <Card className="w-[500px]">
                   {triviaQuestions.length > 0 && (
                     <>
-                      <CardHeader>{removeCharacters(triviaQuestions[currentQuestionIndex].question)}</CardHeader>
+                      <CardHeader>
+                        <div className="flex justify-between mb-3">
+                          <Card className="px-3 py-2">
+                            <Timer onTimeOut={handleTimeOut} />
+                          </Card>
+                          <Card className="px-3 py-2">
+                            Question {currentQuestionIndex + 1}/{triviaQuestions.length}
+                          </Card>
+                        </div>
+                        <p className="text-wrap">{removeCharacters(triviaQuestions[currentQuestionIndex].question)}</p>
+                      </CardHeader>
                       <CardContent className="flex flex-col gap-3">
                         {allPossibleAnswers.map((answer, index) => (
                           <div key={index}>
